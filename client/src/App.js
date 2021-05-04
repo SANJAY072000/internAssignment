@@ -1,15 +1,28 @@
+// importing the modules
 import React,{Component} from 'react';
-import {BrowserRouter as Router,Route} from 'react-router-dom';
-import Welcome from './components/Welcome';
+import {Provider} from 'react-redux';
+import Auth from './components/Auth';
+import NoAuth from './components/NoAuth';
+
+
+// importing the store
+import Store from './redux/store/Store';
+
 
 export default class App extends Component {
   render(){
+    let user=0;
+    if(localStorage.getItem('user'))user=1;
     return(
-      <Router>
-      <div>
-      <Route path='/' exact component={Welcome}/>
-      </div>
-      </Router>
-    );
+    <Provider store={Store}>
+      {
+        user?(
+        <Auth/>
+      ):(
+      <NoAuth/>
+    )
+  }
+    </Provider>
+    )
   }
 }

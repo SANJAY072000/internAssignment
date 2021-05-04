@@ -22,6 +22,7 @@ const dbstr=require('./setup/config').mongoUrl;
 // importing the routes
 const auth=require('./routes/api/auth');
 const update=require('./routes/api/update');
+const log=require('./routes/api/log');
 
 
 // configuring body-parser middleware
@@ -50,6 +51,7 @@ mongoose.connect(dbstr,{useNewUrlParser:true,useUnifiedTopology:true})
 // configuring the routes
 app.use('/api/auth',auth);
 app.use('/api/update',update);
+app.use('/api/log',log);
 
 
 // configuring the build dynamically
