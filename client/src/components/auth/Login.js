@@ -8,9 +8,6 @@ import axios from 'axios';
 import AccountFormAction from '../../redux/actions/auth/AccountFormAction';
 
 
-const url='http://localhost:3000';
-
-
 class Login extends Component {
 
   constructor(props){
@@ -29,7 +26,7 @@ class Login extends Component {
        if(userEmail===''||userPassword==='')alert("Enter all the fields");
        else{
        axios({
-           url:`${url}/api/auth/user/login`,
+           url:`/api/auth/user/login`,
            method:'POST',
            data:this.props.accountData,
          })
