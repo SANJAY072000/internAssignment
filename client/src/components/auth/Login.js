@@ -38,7 +38,7 @@ class Login extends Component {
            else{
            localStorage.setItem('user',res.data.token);
            this.props.setAccountData("RESET",'');
-           this.props.history.push('/');
+           this.props.history.push('/dashboard');
            window.location.reload();
            }
          })
@@ -94,7 +94,3 @@ const mapDispatchToProps=dispatch=>({
 
 // exporting the component
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
-// export default connect((state)=>({accountData:state.AccountFormReducer}),
-// (dispatch)=>({
-//   setAccountData:(inputName,text)=>dispatch(AccountFormAction(inputName,text))
-// }))(Login);

@@ -34,6 +34,7 @@ router.post('/create',passport.authenticate('jwt',{session:false}),(req,res)=>{
 */
 router.get('/allLogs',passport.authenticate('jwt',{session:false}),(req,res)=>{
     Log.find()
+    .sort({date:'desc'})
     .then(log=>{
         if(!log.length)return res.status(200).json({'noLog':'No log is there'});
         return res.status(200).json(log);
