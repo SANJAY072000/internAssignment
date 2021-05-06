@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {connect} from 'react-redux';
 import axios from "axios";
+import {Link} from 'react-router-dom';
 
 // importing the actions
 import DashboardAction from '../../redux/actions/dashboard/DashboardAction';
@@ -37,13 +38,11 @@ class LogTable extends Component {
       .catch(err=>console.log(err));
     }
     this.task();
-
-    this.forceUpdate();
 }
 
   task=async ()=>{
     let n,a1,i,a,p,c,j;
-    j=10;
+    j=2;
     a1=this.props.dashboardData.allLogs;
     n=this.props.dashboardData.allLogs.length;
     a=[];
@@ -52,58 +51,8 @@ class LogTable extends Component {
     for(i=j*(c-1);i<j*c;++i){
       a.push(a1[i]);
     }
-    // p=Math.ceil(n/1);
     await this.setState({a:a,p:p,c:c});
-    this.forceUpdate();
-    // console.log(a);
   }
-
-  // async changePage(u) {
-  //   if (u > -1 && u < pages.length) {
-  //     if (this.state.token !== "") {
-  //       await axios({
-  //         url: decodeURIComponent(
-  //           `${this.state.apiUrl}&token=${this.state.token}&items_per_page=${
-  //             this.state.itempp
-  //           }&page=${u + 1}`
-  //         ),
-  //       })
-  //         .then((res) =>
-  //           this.setState({
-  //             data: res.data.response.data,
-  //             pagination: res.data.response.pagination,
-  //           })
-  //         )
-  //         .catch((err) => this.setState({ msg: "Some Error occured" }));
-  //     } else {
-  //       await axios({
-  //         url: decodeURIComponent(
-  //           `${this.state.apiUrl}&items_per_page=${this.state.itempp}&page=${
-  //             u + 1
-  //           }`
-  //         ),
-  //       })
-  //         .then((res) =>
-  //           this.setState({
-  //             data: res.data.response.data,
-  //             pagination: res.data.response.pagination,
-  //           })
-  //         )
-  //         .catch((err) => this.setState({ msg: "Some Error occured" }));
-  //     }
-  //     if (this.state.showCount === "true") this.showCount();
-  //     pages[prevPage] = false;
-  //     pages[u] = true;
-  //     prevPage = u;
-  //     this.basicCalc();
-  //     pttl = [];
-  //     this.getShowTotal();
-  //     nst = [];
-  //     nst = this.getnst();
-  //     this.forceUpdate();
-  //     window.scrollTo(0, 0);
-  //   }
-  // }
 
   ac=async i=>{
     if(i===-1&&this.state.c>1)await this.setState({c:this.state.c+i});
@@ -165,14 +114,14 @@ class LogTable extends Component {
                     return(
                       <button
                         style={{
-                          borderBottomLeftRadius: "5px",
-                          borderTopLeftRadius: "5px",
                           margin:"0 20px 0 0"
                         }}
-                        onClick={()=>this.qw(i+1)} key={i}>
+                        onClick={()=>this.qw(i+1)} key={i}
+                        className={this.state.c===i+1?'btn btn-success':'btn'}>
                         {i+1}
                       </button>
                     );
+                    else return <div key={i}></div>
                   })
                 }
                 <button
@@ -185,6 +134,7 @@ class LogTable extends Component {
                   &raquo;
                 </button>
             </div>
+            <Link to='/createLog' className='btn btn-danger'>Create a log</Link>
             </div>
       );
   }
