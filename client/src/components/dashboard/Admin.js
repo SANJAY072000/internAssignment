@@ -4,9 +4,9 @@ import axios from "axios";
 import {Link} from 'react-router-dom';
 
 // importing the actions
-import DashboardAction from '../../redux/actions/dashboard/DashboardAction';
+import AdminFormAction from '../../redux/actions/dashboard/AdminFormAction';
 
-class LogTable extends Component {
+class Admin extends Component {
 
   constructor(props) {
     super(props);
@@ -19,20 +19,24 @@ class LogTable extends Component {
 
   async componentDidMount() {
     //  declare variables
-    let token,logs;
+    let token,allusers;
 
     token=localStorage.getItem('user');
-    logs=localStorage.getItem('logs');
+    allusers=localStorage.getItem('allusers');
+
+    let obj={};
+    obj.text='';
 
     // fetch logs from localStorage if data exists there
-    if(logs){
-    await this.props.setDashboardData('ALL_LOGS',JSON.parse(logs));
+    if(allusers){
+      obj.users=JSON.parse(allusers);
+    await this.props.setAdminData('ALL_USERS',obj);
     }
 
     // make an API call
     else{
     axios({
-        url:`/api/log/allLogs`,
+        url:`/api/update/allUsers`,
         headers:{
         'Authorization':token
       }
@@ -40,12 +44,15 @@ class LogTable extends Component {
       .then(res=>{
 
         // save data on localStorage
-        localStorage.setItem('logs',JSON.stringify(res.data));
-        this.props.setDashboardData('ALL_LOGS',res.data);
+        obj.users=res.data;
+        this.props.setAdminData('ALL_USERS',obj);
+        localStorage.setItem('allusers',JSON.stringify(res.data));
+        // console.log(this.props.adminData.allUsers,obj);
+        // console.log(res.data);
 
       })
       .catch(err=>console.log(err));
-    }
+}
     this.task();
 }
 
@@ -57,10 +64,10 @@ class LogTable extends Component {
     noOfResultsPerPage=10;
 
     // copy logs into temp array
-    tmp=this.props.dashboardData.allLogs;
+    tmp=this.props.adminData.allUsers;
 
     // size of array
-    n=this.props.dashboardData.allLogs.length;
+    n=this.props.adminData.allUsers.length;
 
     // denotes logs in each page
     resultsPerPage=[];
@@ -116,14 +123,14 @@ class LogTable extends Component {
             <div style={{maxWidth:'75%',margin:"75px auto"}}>
 
             <div className='text-center m-5'>
-            <h2>Logs Table</h2>
+            <h2>Users Table</h2>
             </div>
 
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th>Phone</th>
-                  <th>Comment</th>
+                  <th>Name</th>
+                  <th>Email</th>
                   </tr>
               </thead>
               <tbody>
@@ -133,8 +140,8 @@ class LogTable extends Component {
                   if(res)
                   return(
                   <tr key={i}>
-                  <td>{res.userPhone}</td>
-                  <td>{res.userComment}</td>
+                  <td>{res.userName}</td>
+                  <td>{res.userEmail}</td>
                   </tr>
                 );
                   else return <tr key={i}></tr>;
@@ -158,7 +165,7 @@ class LogTable extends Component {
                   &laquo;
                 </button>
                 {
-                  this.props.dashboardData.allLogs.map(
+                  this.props.adminData.allUsers.map(
                     (res,i)=>{
                     if(i+1<=this.state.totalPages)
                     return(
@@ -184,21 +191,21 @@ class LogTable extends Component {
                   &raquo;
                 </button>
             </div>
-            <Link to='/createLog' className='btn btn-danger'>Create Log</Link>
+            <Link to='/createUser' className='btn btn-danger'>Create User</Link>
             </div>
       );
   }
 }
 
 // configuring state to props method
-const mapStateToProps=state=>({dashboardData:state.DashboardReducer});
+const mapStateToProps=state=>({adminData:state.AdminFormReducer});
 
 
 // configuring dispatch to props method
 const mapDispatchToProps=dispatch=>({
-  setDashboardData:(inputName,text)=>dispatch(DashboardAction(inputName,text))
+  setAdminData:(inputName,data)=>dispatch(AdminFormAction(inputName,data)),
 });
 
 
 // exporting the component
-export default connect(mapStateToProps,mapDispatchToProps)(LogTable);
+export default connect(mapStateToProps,mapDispatchToProps)(Admin);

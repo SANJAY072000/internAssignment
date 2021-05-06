@@ -46,6 +46,7 @@ router.post('/editDetails-:uid',passport.authenticate('jwt',{session:false}),(re
 */
 router.get('/allUsers',passport.authenticate('jwt',{session:false}),(req,res)=>{
     User.find()
+    .sort({date:'desc'})
     .then(user=>{
         if(!user.length)return res.status(200).json({'noUser':'No user is there'});
         return res.status(200).json(user);

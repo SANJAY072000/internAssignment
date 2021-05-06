@@ -38,7 +38,14 @@ class Login extends Component {
            else{
            localStorage.setItem('user',res.data.token);
            this.props.setAccountData("RESET",'');
+
+           // check if logged user is admin
+           if(res.data.userAdmin)
            this.props.history.push('/dashboard');
+
+           // else if not admin
+           else this.props.history.push('/admin');
+
            window.location.reload();
            }
          })
